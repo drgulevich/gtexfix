@@ -16,7 +16,7 @@ args = parser.parse_args()
 if(re.search('.txt$',args.filename)==None):
     sys.exit('The input should be .txt file. Exit.')
 
-print('txt file:',args.filename)
+print('Input file:',args.filename)
 
 ### Load LaTeX data from binary files
 with open(args.filename, 'r') as fin:
@@ -73,29 +73,18 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
 newtext += trtext[here:]
 trtext=newtext
 
-### Print missing tokens
-print('Missing tokens:',end='')
-lintersect=list(set(llist)^set(range(len(latex))))
-fintersect=list(set(flist)^set(range(len(formulas))))
-cintersect=list(set(clist)^set(range(len(commands))))
-for l in lintersect:
-    print(' [0.%s]'%l,end='')
-for f in fintersect:
-    print(' [1.%s]'%f,end='')
-for c in cintersect:
-    print(' [2.%s]'%c,end='')
-print()
-
-### Print corrupted tokens
-print('Corrupted tokens detected:',end=' ')
-for c in corrupted:
-    print(c,end=' ')
-print()
-
 ### Save the processed output to .tex file
 output_filename = re.sub('.txt$','.tex',args.filename)
 with open(output_filename, 'w') as translation_file:
 	translation_file.write(trtext)
 print('Output file:',output_filename)
-if(corrupted!=[]):
+
+### Report the corrupted tokens
+if(corrupted==[]):
+    print('No corrupted tokens. The translation is ready.')	
+else:
+    print('Corrupted tokens detected:',end=' ')
+    for c in corrupted:
+        print(c,end=' ')
+    print()
     print('To improve the output manually change the corrupted tokens in file',args.filename,'and run from.py again.')

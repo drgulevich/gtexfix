@@ -4,17 +4,18 @@ Fix for Google Tranlate to process LaTeX documents.
 
 **Description**
 
-Code ``to.py`` replaces the LaTeX constructs by tokens. After passing translation the tokens are then restored by ``from.py``. Simple tokens [number.number] are used, which are more friendly to Google Translate. If the token type conflicts with the original text the user is notified. At times, Google Translate will corrupt the tokens and may even change their numbers unpreditably (the side effect of machine learning). Corrupted tokens are identified and reported to the user to be treated manually.
+Code ``to.py`` replaces the LaTeX constructs by tokens. After passing translation the tokens are then restored by ``from.py``. Simple tokens 
+of the type ``[number.number]`` are used, which are more friendly to Google Translate. If the token type conflicts with the original text the user is notified. At times, Google Translate will corrupt the tokens and may even change their numbers unpreditably (the side effect of machine learning!). Corrupted tokens are identified and reported to the user for manual treatment.
 
 **Usage**
 
-1. Run ``$./to.py <source.tex>`` to produce one (or several) ``<source_*.txt>``.
+1. Run ``$./to.py <source.tex>`` to produce ``<source_*.txt>``. Several files are produced if the output exceeds the Google Translate character limit.
 
 2. Feed files ``<source_*.txt>`` to Google Translate and merge them to obtain ``<translation.txt>``.
 
-3. Run ``$/.from.py <translation.txt>`` to produce ``<translation.tex>``.
+3. Run ``$./from.py <translation.txt>`` to produce ``<translation.tex>``.
 
-4. Check for corrupted or missing tokens. If needed, edit manually ``<translation.txt>`` and run step 3 again. 
+4. Check for the corrupted tokens. If needed, edit manually ``<translation.txt>`` and run step 3 again. 
 
 **Example**
 
@@ -33,22 +34,15 @@ Step 2. Google Translate -> Choose document "example_0.txt". Save the output pag
 Step 3. Run ``from.py``:
 
 	$ ./from.py examples/translation.txt 
-	txt file: examples/translation.txt
-	Missing tokens: [1.57]
-	Corrupted tokens detected: [1.57] 
-	Output file: examples/translation.tex
-	To improve the output manually change the corrupted tokens in file examples/translation.txt and run from.py again.
+    Input file: examples/translation.txt
+    Output file: examples/translation.tex
+    Corrupted tokens detected: [1.57] 
+    To improve the output manually change the corrupted tokens in file examples/translation.txt and run from.py again.
 
 Step 4. In a text editor fix the corrupted token [1.57] in ``translation.txt``. Run from.py again:
 
 	$ ./from.py examples/translation.txt 
-	txt file: examples/translation.txt
-	Missing tokens:
-	Corrupted tokens detected: 
-	Output file: examples/translation.tex
-
-The translation is now ready.
-
-
- 
+    Input file: examples/translation.txt
+    Output file: examples/translation.tex
+    No corrupted tokens. The translation is ready.
 
