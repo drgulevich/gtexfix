@@ -46,3 +46,11 @@ Step 4. In a text editor fix the corrupted token [1.57] in ``translation.txt``. 
     Output file: examples/translation.tex
     No corrupted tokens. The translation is ready.
 
+**Alternatives**
+
+There is an alternative tool GoogleTranslate4LyX (https://wiki.lyx.org/Tools/GoogleTranslate4LyX) which converts LaTeX to HTML and uses ``<span class="notranslate">`` tag instead of tokens to pass the Google Translate safely. However, it does not treat math formulas.
+
+**Possibilities for extension**
+
+The token numbers can be unpredictedly changed by Google Translate: e.g. 396 in the original can become 369 after translation for no apparent reason. Although, the corrupted tokens are reported, the ``notranslate`` tags in HTML could in principle give a more stable solution than the use of tokens.
+
