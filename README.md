@@ -52,5 +52,5 @@ There is an alternative tool GoogleTranslate4LyX (https://wiki.lyx.org/Tools/Goo
 
 **Possibilities for extension**
 
-The token numbers can be unpredictedly changed by Google Translate: e.g. 396 in the original can become 369 after translation for no apparent reason. Although, the corrupted tokens are reported, the ``notranslate`` tags in HTML could in principle give a more stable solution than the use of tokens.
+The token numbers can be unpredictably changed by Google Translate: e.g. 396 in the original can become 369 after translation for no apparent reason. Although, the corrupted tokens are reported, the ``notranslate`` tags in HTML could in principle give a more stable solution than the use of tokens.
 
