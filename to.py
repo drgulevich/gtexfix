@@ -48,9 +48,9 @@ else:
 ### Treat LaTeX constructs
 start_values=[]
 end_values=[]
-for m in re.finditer(r'\\begin{equation\**}|\\begin{figure\**}|\\begin{eqnarray\**}|\\begin{multline\**}',text):
+for m in re.finditer(r'\\begin{ *equation\** *}|\\begin{ *figure\** *}|\\begin{ *eqnarray\** *}|\\begin{ *multline\** *}|\\begin{ *thebibliography *}',text):
     start_values.append(m.start())
-for m in re.finditer(r'\\end{equation\**}|\\end{figure\**}|\\end{eqnarray\**}|\\end{multline\**}',text):
+for m in re.finditer(r'\\end{ *equation\** *}|\\end{ *figure\** *}|\\end{ *eqnarray\** *}|\\end{ *multline\** *}|\\end{ *thebibliography *}',text):
     end_values.append(m.end())
 nitems=len(start_values)
 assert(len(end_values)==nitems)
@@ -85,7 +85,9 @@ with open('gtexfix_formulas', 'wb') as fp:
 
 ### Treat LaTeX commands
 recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\eqref{\S*}|[ ~]*\\ref{\S*}|[ ~]*\\label{\S*}|\\fi[ \n]|\\newif|\\setlength'
-    +r'|\\chapter|\\section|\\bibliography(?=[ {])|\\bibliographystyle|\\ifx')
+    +r'|\\title|\\chapter|\\section|\\subsection|\\bibliography(?=[ {])|\\bibliographystyle|\\ifx|\\thispagestyle{\S*}|\\author{[^\}]*}'
+    +r'|\\affiliation{[^\}]*}|\\keywords{[^\}]*}|\\begin{ *abstract *}|\\end{ *abstract *}|\\let|\\newpage|\\relax|\\maketitle'
+    +r'|\\flushbottom|\\medskip|\\noindent')
 commands = recommand.findall(text)
 nc=0
 def repl_command(obj):

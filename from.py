@@ -49,28 +49,26 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
     t=int( re.search('(?<=[\[ ])[012](?=[\.\,])',m.group()).group() )
     n=int( re.search('(?<=[\.\,])[0-9]+(?=\])',m.group()).group() )
     if(t==0):
-        if(n==nl):
-            llist.append(n)
-            newtext += trtext[here:m.start()] + latex[n]
-        else:
-            corrupted.append(m.group())
+        while(nl!=n):
+            corrupted.append('[%d.%d]'%(t,nl))
+            nl+=1
+        llist.append(n)
+        newtext += trtext[here:m.start()] + latex[n]
         nl+=1
     elif(t==1):
-        if(n==nf):
-            flist.append(n)
-            newtext += trtext[here:m.start()] + formulas[n]
-        else:
-            corrupted.append(m.group())         
+        while(nf!=n):
+            corrupted.append('[%d.%d]'%(t,nf))
+            nf+=1
+        flist.append(n)
+        newtext += trtext[here:m.start()] + formulas[n]
         nf+=1
-    elif(t==2 and n==nc):
-        if(n==nc):
-            clist.append(n)
-            newtext += trtext[here:m.start()] + commands[n]
-        else:
-            corrupted.append(m.group())           
+    elif(t==2):
+        while(nc!=n):
+            corrupted.append('[%d.%d]'%(t,nc))
+            nc+=1
+        clist.append(n)
+        newtext += trtext[here:m.start()] + commands[n]
         nc+=1
-    else:
-        corrupted.append(m.group())
     here=m.end()
 newtext += trtext[here:]
 trtext=newtext
@@ -100,4 +98,4 @@ with open(output_filename, 'w') as translation_file:
 	translation_file.write(trtext)
 print('Output file:',output_filename)
 if(corrupted!=[]):
-    print('To improve the output manually change the first corrupted/missing token in file',args.filename,'and run from.py again.')
+    print('To improve the output manually change the corrupted tokens in file',args.filename,'and run from.py again.')
