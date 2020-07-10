@@ -2,6 +2,10 @@
 
 Fix for Google Tranlate to process LaTeX documents.
 
+**Description**
+
+Code ``to.py`` replaces the LaTeX constructs by tokens. After passing translation the tokens are then restored by ``from.py``. Simple tokens [number.number] are used, which are more friendly to Google Translate. If the token type conflicts with the original text the user is notified. At times, Google Translate will corrupt the tokens and may even change their numbers unpreditably (the side effect of machine learning). Corrupted tokens are identified and reported to the user to be treated manually.
+
 **Usage**
 
 1. Run ``$./to.py <source.tex>`` to produce one (or several) ``<source_*.txt>``.
