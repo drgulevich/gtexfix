@@ -84,10 +84,10 @@ with open('gtexfix_formulas', 'wb') as fp:
     pickle.dump(formulas, fp)
 
 ### Treat LaTeX commands
-recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\eqref{\S*}|[ ~]*\\ref{\S*}|[ ~]*\\label{\S*}|\\fi[ \n]|\\newif|\\setlength'
-    +r'|\\title|\\chapter|\\section|\\subsection|\\bibliography(?=[ {])|\\bibliographystyle|\\ifx|\\thispagestyle{\S*}|\\author{[^\}]*}'
+recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\citeonline{[^}]*}|[ ~]*\\eqref{\S*}|[ ~]*\\ref{\S*}|[ ~]*\\label{\S*}|\\fi[ \n]|\\newif|\\setlength'
+    +r'|\\title|\\chapter|\\section|\\subsection|\\bibliography{[^}]*}|\\bibliographystyle{[^}]*}|\\ifx|\\thispagestyle{\S*}|\\author{[^\}]*}'
     +r'|\\affiliation{[^\}]*}|\\keywords{[^\}]*}|\\begin{ *abstract *}|\\end{ *abstract *}|\\let|\\newpage|\\relax|\\maketitle'
-    +r'|\\flushbottom|\\medskip|\\noindent')
+    +r'|\\flushbottom|\\medskip|\\noindent|\\textit|\\degree|\\undefined|\\globalcompile')
 commands = recommand.findall(text)
 nc=0
 def repl_command(obj):

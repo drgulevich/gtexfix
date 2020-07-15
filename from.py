@@ -49,6 +49,9 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
     t=int( re.search('(?<=[\[ ])[012](?=[\.\,])',m.group()).group() )
     n=int( re.search('(?<=[\.\,])[0-9]+(?=\])',m.group()).group() )
     if(t==0):
+        if(n<nl):
+            print('Token ',m.group(),'found in place of [%d.%d]. Edit manually and run again.'%(t,nl))
+            break
         while(nl!=n):
             corrupted.append('[%d.%d]'%(t,nl))
             nl+=1
@@ -56,6 +59,9 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
         newtext += trtext[here:m.start()] + latex[n]
         nl+=1
     elif(t==1):
+        if(n<nf):
+            print('Token ',m.group(),'found in place of [%d.%d]. Edit manually and run again.'%(t,nf))
+            break
         while(nf!=n):
             corrupted.append('[%d.%d]'%(t,nf))
             nf+=1
@@ -63,6 +69,9 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
         newtext += trtext[here:m.start()] + formulas[n]
         nf+=1
     elif(t==2):
+        if(n<nc):
+            print('Token ',m.group(),'found in place of [%d.%d]. Edit manually and run again.'%(t,nc))
+            break
         while(nc!=n):
             corrupted.append('[%d.%d]'%(t,nc))
             nc+=1
