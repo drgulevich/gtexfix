@@ -42,7 +42,7 @@ if(bdoc!=None):
         text = '[0.0]' + source[bdoc.end():]
         postamble=[]
 else:
-    text=source.copy()
+    text=source
     postamble=[]
 
 ### Treat LaTeX constructs
