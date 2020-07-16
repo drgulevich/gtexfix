@@ -48,9 +48,11 @@ else:
 ### Treat LaTeX constructs
 start_values=[]
 end_values=[]
-for m in re.finditer(r'\\begin{ *equation\** *}|\\begin{ *figure\** *}|\\begin{ *eqnarray\** *}|\\begin{ *multline\** *}|\\begin{ *thebibliography *}',text):
+for m in re.finditer(r'\\begin{ *equation\** *}|\\begin{ *figure\** *}|\\begin{ *eqnarray\** *}|\\begin{ *multline\** *}'
+    +r'|\\begin{ *thebibliography *}|\\begin{ *verbatim\** *}|\\begin{ *table\** *}',text):
     start_values.append(m.start())
-for m in re.finditer(r'\\end{ *equation\** *}|\\end{ *figure\** *}|\\end{ *eqnarray\** *}|\\end{ *multline\** *}|\\end{ *thebibliography *}',text):
+for m in re.finditer(r'\\end{ *equation\** *}|\\end{ *figure\** *}|\\end{ *eqnarray\** *}|\\end{ *multline\** *}'
+    +r'|\\end{ *thebibliography *}|\\end{ *verbatim\** *}|\\end{ *table\** *}',text):
     end_values.append(m.end())
 nitems=len(start_values)
 assert(len(end_values)==nitems)
@@ -84,10 +86,12 @@ with open('gtexfix_formulas', 'wb') as fp:
     pickle.dump(formulas, fp)
 
 ### Treat LaTeX commands
-recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\citeonline{[^}]*}|[ ~]*\\eqref{\S*}|[ ~]*\\ref{\S*}|[ ~]*\\label{\S*}|\\fi[ \n]|\\newif|\\setlength'
-    +r'|\\title|\\chapter|\\section|\\subsection|\\bibliography{[^}]*}|\\bibliographystyle{[^}]*}|\\ifx|\\thispagestyle{\S*}|\\author{[^\}]*}'
-    +r'|\\affiliation{[^\}]*}|\\keywords{[^\}]*}|\\begin{ *abstract *}|\\end{ *abstract *}|\\let|\\newpage|\\relax|\\maketitle'
-    +r'|\\flushbottom|\\medskip|\\noindent|\\textit|\\degree|\\undefined|\\globalcompile')
+recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\citeonline{[^}]*}|[ ~]*\\eqref{\S*}|[ ~]*\\ref{\S*}|[ ~]*\\label{\S*}|\\fi[ \n]|\\newif'
+    +r'|\\setlength{[^}]*}{[^}]*}'
+    +r'|\\title|\\chapter|\\section|\\subsection|\\subsubsection|\\bibliography{[^}]*}|\\bibliographystyle{[^}]*}|\\thispagestyle{\S*}|\\author{[^\}]*}'
+    +r'|\\affiliation{[^\}]*}|\\keywords{[^\}]*}|\\begin{ *abstract *}|\\end{ *abstract *}|\\let(?:=\W)|\\newpage|\\relax|\\maketitle'
+    +r'|\\flushbottom|\\medskip|\\noindent|\\textit|\\degree|\\undefined|\\globalcompile|[ ~]*\\footnote'
+    +r'|[ ~]*\\verb\|[^|]*\||\\FloatBarrier|\\iffalse|\\it(?:=\W)|\\ifx|\\renewcommand{[^}]*}{[^}]*}|\appendix')
 commands = recommand.findall(text)
 nc=0
 def repl_command(obj):
