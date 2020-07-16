@@ -94,7 +94,7 @@ recommand = re.compile(r'[ ~]*\\cite{[^}]*}|[ ~]*\\citeonline{[^}]*}|[ ~]*\\eqre
     +r'|\\flushbottom|\\medskip|\\noindent|\\textit|\\degree|\\undefined|\\globalcompile|[ ~]*\\footnote'
     +r'|[ ~]*\\verb\|[^|]*\||\\FloatBarrier|\\iffalse|\\it(?:=\W)|\\ifx|\\renewcommand{[^}]*}{[^}]*}|\appendix')
 '''
-recommand = re.compile(r'\\\w* *{[^}]*} *{[^}]*}|\\\w* *{[^}]*}|\\\w*')
+recommand = re.compile(r'\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|\\\w*\s*{[^}]*}\s*{[^}]*}|\\\w*\s*{[^}]*}|\\\w*')
 
 commands = recommand.findall(text)
 nc=0
