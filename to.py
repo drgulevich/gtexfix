@@ -29,6 +29,7 @@ if(conflicts!=[]):
 else:
     print('No token conflicts detected. Proceeding.')
 
+### Hide everything that is beyond \begin{document} ... \end{document}
 latex=[]
 bdoc=re.search(r'\\begin{document}',source)
 edoc=re.search(r'\\end{document}',source)
@@ -36,16 +37,30 @@ if(bdoc!=None):
     preamble=source[:bdoc.end()]
     latex.append(preamble)
     if(edoc!=None):
-        text = '[0.0]' + source[bdoc.end():edoc.start()]
+        text = '[1.0]' + source[bdoc.end():edoc.start()]
         postamble=source[edoc.start():]
     else:
-        text = '[0.0]' + source[bdoc.end():]
+        text = '[1.0]' + source[bdoc.end():]
         postamble=[]
 else:
     text=source
     postamble=[]
 
-### Treat LaTeX constructs
+### Hide all comments
+recomment = re.compile(r'(?<!\\)[%].*')
+comments=[]
+for m in recomment.finditer(text):
+    comments.append(m.group())
+ncomment=0
+def repl_comment(obj):
+    global ncomment
+    ncomment += 1
+    return '___GTEXFIXCOMMENT%d___'%(ncomment-1)
+text=recomment.sub(repl_comment,text)
+with open('gtexfix_comments', 'wb') as fp:
+    pickle.dump(comments, fp)
+
+### Hide LaTeX constructs \begin{...} ... \end{...}
 start_values=[]
 end_values=[]
 for m in re.finditer(r'\\begin{ *equation\** *}|\\begin{ *figure\** *}|\\begin{ *eqnarray\** *}|\\begin{ *multline\** *}'
@@ -60,42 +75,30 @@ if(nitems>0):
     newtext=text[:start_values[0]]
     for neq in range(nitems-1):
         latex.append(text[start_values[neq]:end_values[neq]])
-        newtext += '[0.%d]'%(len(latex)-1) + text[end_values[neq]:start_values[neq+1]]
+        newtext += '[1.%d]'%(len(latex)-1) + text[end_values[neq]:start_values[neq+1]]
     latex.append(text[start_values[nitems-1]:end_values[nitems-1]])
-    newtext += '[0.%d]'%(len(latex)-1) + text[end_values[nitems-1]:]
+    newtext += '[1.%d]'%(len(latex)-1) + text[end_values[nitems-1]:]
     text=newtext
 
 if(postamble!=[]):
     latex.append(postamble)
-    text += '[0.%d]'%(len(latex)-1)
+    text += '[1.%d]'%(len(latex)-1)
 with open('gtexfix_latex', 'wb') as fp:
     pickle.dump(latex, fp)
 
-### Treat LaTeX formulas $...$ and $$...$$
-# From https://stackoverflow.com/questions/54663900/how-to-use-regular-expression-to-remove-all-math-expression-in-latex-file
-reformula = re.compile(r'(\$+)(?:(?!\1)[\s\S])*\1')
-formulas=[]
-for m in reformula.finditer(text):
-    formulas.append(m.group())
-nf=0
-def repl_f(obj):
-    global nf
-    nf += 1
-    return '[1.%d]'%(nf-1)
-text=reformula.sub(repl_f,text)
-with open('gtexfix_formulas', 'wb') as fp:
-    pickle.dump(formulas, fp)
-
-### Treat LaTeX commands
-recommand = re.compile(r'\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|~*\\\w*\s*{[^}]*}\s*{[^}]*}|~*\\\w*\s*{[^}]*}|~*\\\w*')
-
-commands = recommand.findall(text)
+### Replace LaTeX commands, formulas and comments by tokens
+# Regular expression r'(\$+)(?:(?!\1)[\s\S])*\1' for treatment of $...$ and $$...$$ from:
+# https://stackoverflow.com/questions/54663900/how-to-use-regular-expression-to-remove-all-math-expression-in-latex-file
+recommand = re.compile(r'___GTEXFIXCOMMENT[0-9]*___|\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|~*\\footnote[0-9]*|(\$+)(?:(?!\1)[\s\S])*\1|~*\\\w*\s*{[^}]*}\s*{[^}]*}|~*\\\w*\s*{[^}]*}|~*\\\w*')
+commands=[]
+for m in recommand.finditer(text):
+    commands.append(m.group())
 nc=0
-def repl_command(obj):
+def repl_f(obj):
     global nc
     nc += 1
-    return  '[2.%d]'%(nc-1)
-text=recommand.sub(repl_command,text)
+    return '[2.%d]'%(nc-1)
+text=recommand.sub(repl_f,text)
 with open('gtexfix_commands', 'wb') as fp:
     pickle.dump(commands, fp)
 
