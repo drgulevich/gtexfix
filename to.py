@@ -63,12 +63,13 @@ if(nitems>0):
         newtext += '[0.%d]'%(len(latex)-1) + text[end_values[neq]:start_values[neq+1]]
     latex.append(text[start_values[nitems-1]:end_values[nitems-1]])
     newtext += '[0.%d]'%(len(latex)-1) + text[end_values[nitems-1]:]
+    text=newtext
+
 if(postamble!=[]):
     latex.append(postamble)
-    newtext += '[0.%d]'%(len(latex)-1)
+    text += '[0.%d]'%(len(latex)-1)
 with open('gtexfix_latex', 'wb') as fp:
     pickle.dump(latex, fp)
-text=newtext
 
 ### Treat LaTeX formulas $...$ and $$...$$
 # From https://stackoverflow.com/questions/54663900/how-to-use-regular-expression-to-remove-all-math-expression-in-latex-file
@@ -86,7 +87,7 @@ with open('gtexfix_formulas', 'wb') as fp:
     pickle.dump(formulas, fp)
 
 ### Treat LaTeX commands
-recommand = re.compile(r'\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|[ ~]*\\\w*\s*{[^}]*}\s*{[^}]*}|[ ~]*\\\w*\s*{[^}]*}|[ ~]*\\\w*')
+recommand = re.compile(r'\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|~*\\\w*\s*{[^}]*}\s*{[^}]*}|~*\\\w*\s*{[^}]*}|~*\\\w*')
 
 commands = recommand.findall(text)
 nc=0
