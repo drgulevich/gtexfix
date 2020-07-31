@@ -1,6 +1,6 @@
 # gtexfix
 
-Fix for Google Tranlate to process LaTeX documents.
+Fix for Google Translate to process LaTeX documents.
 
 **Description**
 
