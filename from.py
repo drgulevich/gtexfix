@@ -28,12 +28,13 @@ with open ('gtexfix_commands', 'rb') as fp:
 with open ('gtexfix_latex', 'rb') as fp:
     latex = pickle.load(fp)
 
-### Replace extra characters introduced by translation
+### Replace weird characters introduced by translation
 trtext=re.sub('\u200B',' ',source)
 
 ### Fix spacing
 trtext = re.sub(r'\\ ',r'\\',trtext)
 trtext = re.sub(' ~ ','~',trtext)
+trtext = re.sub(' {','{',trtext)
 
 ### Restore LaTeX and formulas
 here=0
