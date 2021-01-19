@@ -91,7 +91,9 @@ with open('gtexfix_latex', 'wb') as fp:
 ### Replace LaTeX commands, formulas and comments by tokens
 # Regular expression r'(\$+)(?:(?!\1)[\s\S])*\1' for treatment of $...$ and $$...$$ from:
 # https://stackoverflow.com/questions/54663900/how-to-use-regular-expression-to-remove-all-math-expression-in-latex-file
-recommand = re.compile(r'___GTEXFIXCOMMENT[0-9]*___|\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|~*\\footnote[0-9]*|(\$+)(?:(?!\1)[\s\S])*\1|~*\\\w*\s*{[^}]*}\s*{[^}]*}|~*\\\w*\s*{[^}]*}|~*\\\w*')
+recommand = re.compile(r'___GTEXFIXCOMMENT[0-9]*___|\\\\|\\title|\\chapter\**|\\section\**|\\subsection\**|\\subsubsection\**|\\subparagraph\**'
+                       +r'|\\textbf\**|\\textit\**|\\textsc\**|\\textsf\**|\\textsl\**|\\texttt\**|\\emph\**|\\underline\**'
+                       +r'|~*\\footnote[0-9]*|(\$+)(?:(?!\1)[\s\S])*\1|~*\\\w*\s*{[^}]*}\s*{[^}]*}|~*\\\w*\s*{[^}]*}|~*\\\w*')
 commands=[]
 for m in recommand.finditer(text):
     commands.append(m.group())

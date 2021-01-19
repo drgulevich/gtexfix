@@ -29,12 +29,12 @@ with open ('gtexfix_latex', 'rb') as fp:
     latex = pickle.load(fp)
 
 ### Replace weird characters introduced by translation
-trtext=re.sub('\u200B',' ',source)
+trtext = source.replace('\u200B',' ')
 
 ### Fix spacing
-trtext = re.sub(r'\\ ',r'\\',trtext)
-trtext = re.sub(' ~ ','~',trtext)
-trtext = re.sub(' {','{',trtext)
+trtext = trtext.replace(r'\\ ',r'\\')
+trtext = trtext.replace(' ~ ','~')
+trtext = trtext.replace(' {','{')
 
 ### Restore LaTeX and formulas
 here=0
@@ -66,6 +66,9 @@ for m in re.finditer('\[ *[012][\.\,][0-9]+\]',trtext):
     here=m.end()
 newtext += trtext[here:]
 trtext=newtext
+
+### Fix spacing
+trtext = trtext.replace(' [','[')
 
 ### Restore comments
 here=0
