@@ -65,11 +65,11 @@ start_values=[]
 end_values=[]
 for m in re.finditer(r'\\begin{ *equation\** *}|\\begin{ *figure\** *}|\\begin{ *eqnarray\** *}|\\begin{ *multline\** *}'
     +r'|\\begin{ *thebibliography *}|\\begin{ *verbatim\** *}|\\begin{ *table\** *}|\\begin{ *subequations\** *}|\\begin{ *align\** *}'
-    +r'|\\begin{ *displaymath\** *}|\\begin{ *gather\** *}|\\\[',text):
+    +r'|\\begin{ *displaymath\** *}|\\begin{ *gather\** *}|\\begin{ *frame\** *}|\\\[',text):
     start_values.append(m.start())
 for m in re.finditer(r'\\end{ *equation\** *}|\\end{ *figure\** *}|\\end{ *eqnarray\** *}|\\end{ *multline\** *}'
     +r'|\\end{ *thebibliography *}|\\end{ *verbatim\** *}|\\end{ *table\** *}|\\end{ *subequations\** *}|\\end{ *align\** *}'
-    +r'|\\end{ *displaymath\** *}|\\end{ *gather\** *}|\\\]',text):
+    +r'|\\end{ *displaymath\** *}|\\end{ *gather\** *}|\\begin{ *frame\** *}|\\\]',text):
     end_values.append(m.end())
 nitems=len(start_values)
 assert(len(end_values)==nitems)
